@@ -47,6 +47,9 @@
     npm run dev
     ```
 
+## 项目截图
+![alt text](image.png)
+
 ## 作者
 
 - **github-woyaoxingfua**
