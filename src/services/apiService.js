@@ -2,7 +2,7 @@ import axios from 'axios'
 import { useAuthStore } from '@/stores/auth' // 导入 auth store
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.0.9:8080/api',
+  baseURL: 'VITE_API_URL=http://your-backend-api-url/api',
   headers: {
     'Content-Type': 'application/json'
   }
