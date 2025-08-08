@@ -68,10 +68,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* HomeView 的样式现在只关心自己的内容 */
 .dashboard-content {
   max-width: 800px;
-  margin: 0 auto; /* 水平居中 */
+  margin: 0 auto;
+  padding: 0 15px; /* 在移动端添加水平内边距 */
 }
 .status-card {
   display: flex;
@@ -115,5 +115,16 @@ onMounted(() => {
   color: white;
   text-decoration: none;
   border-radius: 5px;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .status-card {
+    flex-direction: column;
+    gap: 20px; /* 在垂直排列时增加间距 */
+  }
+  .value {
+    font-size: 20px; /* 在移动端稍微减小字体大小 */
+  }
 }
 </style>

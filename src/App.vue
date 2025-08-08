@@ -1,26 +1,22 @@
 <template>
   <div v-if="authStore.isAuthenticated" class="app-layout">
     <header class="main-header">
+      <h1 class="app-title">我的钱包</h1>
       <nav class="main-nav">
         <router-link to="/">主页</router-link>
         <router-link to="/history">账单历史</router-link>
         <router-link to="/budget">预算设置</router-link>
       </nav>
-
-      <h1 class="app-title">我的钱包</h1>
-
       <button @click="handleLogout" class="logout-button">退出登录</button>
     </header>
 
     <main class="content-area">
-     
       <RouterView />
     </main>
-     <footer class="app-footer">
+    <footer class="app-footer">
       Copyright © 2025 github-woyaoxingfua. All Rights Reserved.
     </footer>
   </div>
-
   <RouterView v-else />
 </template>
 
@@ -31,7 +27,6 @@ import { useAuthStore } from './stores/auth';
 const authStore = useAuthStore();
 const router = useRouter();
 
-// 将退出登录的逻辑移动到这里
 const handleLogout = () => {
   authStore.logout();
   router.push('/login');
@@ -47,43 +42,44 @@ body {
   color: #333;
 }
 
-/* 应用主布局 */
 .app-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* 顶部导航栏样式 */
+/* 移动端优先样式 */
 .main-header {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column; /* 移动端默认垂直排列 */
   align-items: center;
   background-color: #ffffff;
-  padding: 0 40px;
-  height: 64px;
+  padding: 10px 15px; /* 调整移动端内边距 */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  flex-shrink: 0; /* 防止页头被压缩 */
 }
 
 .app-title {
-  font-size: 20px;
+  font-size: 24px;
   font-weight: 600;
   color: #000;
+  margin-bottom: 10px; /* 标题和导航间距 */
+}
+
+.main-nav {
+  display: flex;
+  gap: 15px; /* 使用 gap 替代 margin */
+  margin-bottom: 10px; /* 导航和按钮间距 */
 }
 
 .main-nav a {
-  margin-right: 24px;
   text-decoration: none;
   color: #555;
   font-weight: 500;
   transition: color 0.2s;
+  padding: 5px;
 }
 
-.main-nav a:hover {
-  color: #007bff;
-}
-
+.main-nav a:hover,
 .main-nav a.router-link-exact-active {
   color: #007bff;
 }
@@ -95,6 +91,8 @@ body {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
+  width: 100%; /* 移动端按钮宽度 */
+  max-width: 200px; /* 按钮最大宽度 */
 }
 
 .logout-button:hover {
@@ -102,18 +100,40 @@ body {
   border-color: #aaa;
 }
 
-/* 内容区域样式 */
 .content-area {
-  flex-grow: 1; /* 占据剩余所有空间 */
+  flex-grow: 1;
   padding: 20px;
 }
 
 .app-footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    color: #999;
-    background-color: #f4f7fa;
-    flex-shrink: 0; /* 保证 footer 不会被压缩 */
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: #999;
+  background-color: #f4f7fa;
+  flex-shrink: 0;
+}
+
+/* 桌面端样式 - 使用媒体查询 */
+@media (min-width: 768px) {
+  .main-header {
+    flex-direction: row; /* 桌面端恢复水平排列 */
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 40px;
   }
+
+  .app-title {
+    margin-bottom: 0; /* 移除桌面端标题下边距 */
+  }
+
+  .main-nav {
+    margin-bottom: 0; /* 移除桌面端导航下边距 */
+    gap: 24px; /* 桌面端导航间距 */
+  }
+
+  .logout-button {
+    width: auto; /* 恢复按钮自动宽度 */
+  }
+}
 </style>
