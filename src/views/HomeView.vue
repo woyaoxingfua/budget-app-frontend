@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loading-indicator">正在加载数据...</div>
+  <SkeletonLoader v-if="loading" />
 
   <div v-if="error" class="error-message">
     <p>{{ error }}</p>
@@ -33,10 +33,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineAsyncComponent } from 'vue';
 import BanknoteDisplay from '@/components/BanknoteDisplay.vue';
-import AddTransactionForm from '@/components/AddTransactionForm.vue';
 import apiService from '@/services/apiService';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
+
+const AddTransactionForm = defineAsyncComponent(() =>
+  import('@/components/AddTransactionForm.vue')
+);
 
 // 退出登录的逻辑已经移到 App.vue，这里不再需要
 // const authStore = useAuthStore();

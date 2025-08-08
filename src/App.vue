@@ -2,13 +2,34 @@
   <div v-if="authStore.isAuthenticated" class="app-layout">
     <header class="main-header">
       <h1 class="app-title">我的钱包</h1>
+
+      <!-- 移动端汉堡包按钮 -->
+      <button @click="toggleMobileNav" class="mobile-nav-toggle">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
+      <!-- 桌面端导航 -->
+      <div class="desktop-nav-links">
+        <nav class="main-nav">
+          <router-link to="/">主页</router-link>
+          <router-link to="/history">账单历史</router-link>
+          <router-link to="/budget">预算设置</router-link>
+        </nav>
+        <button @click="handleLogout" class="logout-button">退出登录</button>
+      </div>
+    </header>
+
+    <!-- 移动端展开的导航 -->
+    <div v-if="isMobileNavOpen" class="mobile-nav-links">
       <nav class="main-nav">
         <router-link to="/">主页</router-link>
         <router-link to="/history">账单历史</router-link>
         <router-link to="/budget">预算设置</router-link>
       </nav>
       <button @click="handleLogout" class="logout-button">退出登录</button>
-    </header>
+    </div>
 
     <main class="content-area">
       <RouterView />
@@ -21,16 +42,32 @@
 </template>
 
 <script setup>
-import { RouterView, RouterLink, useRouter } from 'vue-router'
+import { ref, watch } from 'vue';
+import { RouterView, RouterLink, useRouter, useRoute } from 'vue-router';
 import { useAuthStore } from './stores/auth';
 
 const authStore = useAuthStore();
 const router = useRouter();
+const route = useRoute();
+
+const isMobileNavOpen = ref(false);
+
+const toggleMobileNav = () => {
+  isMobileNavOpen.value = !isMobileNavOpen.value;
+};
 
 const handleLogout = () => {
+  if (isMobileNavOpen.value) {
+    isMobileNavOpen.value = false;
+  }
   authStore.logout();
   router.push('/login');
 };
+
+// 监听路由变化，在导航后关闭移动端菜单
+watch(() => route.path, () => {
+  isMobileNavOpen.value = false;
+});
 </script>
 
 <style>
@@ -48,27 +85,73 @@ body {
   min-height: 100vh;
 }
 
-/* 移动端优先样式 */
+/* 头部样式 */
 .main-header {
   display: flex;
-  flex-direction: column; /* 移动端默认垂直排列 */
+  justify-content: space-between;
   align-items: center;
   background-color: #ffffff;
-  padding: 10px 15px; /* 调整移动端内边距 */
+  padding: 0 15px;
+  height: 60px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative; /* 为z-index生效 */
+  z-index: 1000;
 }
 
 .app-title {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   color: #000;
-  margin-bottom: 10px; /* 标题和导航间距 */
 }
 
-.main-nav {
+/* 移动端汉堡包按钮 */
+.mobile-nav-toggle {
+  display: none; /* 默认隐藏 */
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  height: 25px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+}
+
+.mobile-nav-toggle .icon-bar {
+  width: 100%;
+  height: 3px;
+  background-color: #333;
+  border-radius: 2px;
+}
+
+/* 移动端展开的导航菜单 */
+.mobile-nav-links {
+  display: none; /* 默认隐藏 */
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.mobile-nav-links .main-nav {
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.mobile-nav-links .logout-button {
+  width: 100%;
+  max-width: 200px;
+}
+
+/* 桌面端导航 */
+.desktop-nav-links {
   display: flex;
-  gap: 15px; /* 使用 gap 替代 margin */
-  margin-bottom: 10px; /* 导航和按钮间距 */
+  align-items: center;
+  gap: 24px;
 }
 
 .main-nav a {
@@ -91,8 +174,6 @@ body {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
-  width: 100%; /* 移动端按钮宽度 */
-  max-width: 200px; /* 按钮最大宽度 */
 }
 
 .logout-button:hover {
@@ -114,26 +195,16 @@ body {
   flex-shrink: 0;
 }
 
-/* 桌面端样式 - 使用媒体查询 */
-@media (min-width: 768px) {
-  .main-header {
-    flex-direction: row; /* 桌面端恢复水平排列 */
-    justify-content: space-between;
-    height: 64px;
-    padding: 0 40px;
+/* 响应式媒体查询 */
+@media (max-width: 768px) {
+  .desktop-nav-links {
+    display: none; /* 在移动端隐藏桌面导航 */
   }
-
-  .app-title {
-    margin-bottom: 0; /* 移除桌面端标题下边距 */
+  .mobile-nav-toggle {
+    display: flex; /* 在移动端显示汉堡包按钮 */
   }
-
-  .main-nav {
-    margin-bottom: 0; /* 移除桌面端导航下边距 */
-    gap: 24px; /* 桌面端导航间距 */
-  }
-
-  .logout-button {
-    width: auto; /* 恢复按钮自动宽度 */
+  .mobile-nav-links {
+    display: flex; /* 当 v-if 为 true 时，flex 生效 */
   }
 }
 </style>
