@@ -1,5 +1,5 @@
 <template>
-  <div v-if="loading" class="loading-indicator">正在加载数据...</div>
+  <SkeletonLoader v-if="loading" />
 
   <div v-if="error" class="error-message">
     <p>{{ error }}</p>
@@ -33,10 +33,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineAsyncComponent } from 'vue';
 import BanknoteDisplay from '@/components/BanknoteDisplay.vue';
-import AddTransactionForm from '@/components/AddTransactionForm.vue';
 import apiService from '@/services/apiService';
+import SkeletonLoader from '@/components/SkeletonLoader.vue';
+
+const AddTransactionForm = defineAsyncComponent(() =>
+  import('@/components/AddTransactionForm.vue')
+);
 
 // 退出登录的逻辑已经移到 App.vue，这里不再需要
 // const authStore = useAuthStore();
@@ -68,10 +72,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* HomeView 的样式现在只关心自己的内容 */
 .dashboard-content {
   max-width: 800px;
-  margin: 0 auto; /* 水平居中 */
+  margin: 0 auto;
+  padding: 0 15px; /* 在移动端添加水平内边距 */
 }
 .status-card {
   display: flex;
@@ -115,5 +119,16 @@ onMounted(() => {
   color: white;
   text-decoration: none;
   border-radius: 5px;
+}
+
+/* 响应式样式 */
+@media (max-width: 768px) {
+  .status-card {
+    flex-direction: column;
+    gap: 20px; /* 在垂直排列时增加间距 */
+  }
+  .value {
+    font-size: 20px; /* 在移动端稍微减小字体大小 */
+  }
 }
 </style>
