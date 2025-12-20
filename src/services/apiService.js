@@ -1,60 +1,67 @@
 import axios from 'axios'
-import { useAuthStore } from '@/stores/auth' // 导入 auth store
+import { useAuthStore } from '@/stores/auth'
+
+// API 基址：优先读取环境变量，未设置则回退到本机 8080 端口
+const apiBaseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080/api'
+if (import.meta.env.DEV) {
+  // 方便定位移动端未取到正确基址的情况
+  console.info('[api] baseURL =', apiBaseURL)
+}
 
 const apiClient = axios.create({
-  baseURL: 'http://192.168.0.9:8080/api',
+  baseURL: apiBaseURL,
   headers: {
     'Content-Type': 'application/json'
   }
 })
 
-// ★★★ 请求拦截器 ★★★
-// 在每个请求被发送之前，都会执行这个函数
+// 请求拦截器：自动附加 Authorization 头
 apiClient.interceptors.request.use(
   (config) => {
     const authStore = useAuthStore()
     const token = authStore.token
 
     if (token) {
-      // 如果存在 token，则在请求头中添加 Authorization
       config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },
   (error) => {
+    if (import.meta.env.DEV) {
+      console.error('[api] request error before send', error)
+    }
     return Promise.reject(error)
   }
 )
 
-// 导出一个包含所有 API 请求方法的对象
 export default {
-  // 登录请求
+  // 登录
   loginUser(credentials) {
     return apiClient.post('/auth/login', credentials)
   },
 
-  // 注册用户请求
+  // 注册
   registerUser(userData) {
     return apiClient.post('/auth/register', userData)
   },
 
-  // ↓↓↓ 新增的 API 方法 ↓↓↓
-
-  // 获取当前预算状态
+  // 获取预算状态
   getBudgetStatus() {
     return apiClient.get('/v1/budget/status')
   },
 
-  // 获取所有交易记录
+  // 获取交易列表
   getTransactions() {
     return apiClient.get('/v1/transactions')
   },
 
-  // 添加新交易记录
+  // 添加交易
   addTransaction(transactionData) {
     return apiClient.post('/v1/transactions', transactionData)
   },
+
+  // 设置预算
   setBudget(budgetData) {
-    return apiClient.post('/v1/budget', budgetData);
+    return apiClient.post('/v1/budget', budgetData)
   }
 }

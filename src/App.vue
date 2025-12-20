@@ -62,39 +62,70 @@ body {
   background-color: #ffffff;
   padding: 0 40px;
   height: 64px;
+  min-height: 64px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  flex-shrink: 0; /* 防止页头被压缩 */
+  flex-shrink: 0;
+  flex-wrap: nowrap;
 }
 
 .app-title {
   font-size: 20px;
   font-weight: 600;
   color: #000;
+  margin: 0;
+}
+
+.main-nav {
+  display: flex;
+  gap: 24px;
+  order: 1;
+  width: auto;
+  justify-content: flex-start;
+  padding-bottom: 0;
 }
 
 .main-nav a {
-  margin-right: 24px;
   text-decoration: none;
   color: #555;
   font-weight: 500;
   transition: color 0.2s;
+  font-size: 16px;
 }
-
-.main-nav a:hover {
-  color: #007bff;
-}
-
-.main-nav a.router-link-exact-active {
-  color: #007bff;
+@media (max-width: 767px) {
+  .main-header {
+    padding: 0 16px;
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .main-nav {
+    width: 100%;
+    order: 3;
+    justify-content: center;
+    gap: 12px;
+    padding: 10px 0 4px;
+  }
+  .main-nav a {
+    font-size: 14px;
+  }
+  .app-title {
+    font-size: 18px;
+    margin: 10px 0;
+    order: 1;
+  }
+  .logout-button {
+    order: 2;
+    margin-bottom: 10px;
+  }
 }
 
 .logout-button {
   background: none;
   border: 1px solid #ccc;
-  padding: 8px 16px;
+  padding: 6px 12px;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s;
+  font-size: 13px;
 }
 
 .logout-button:hover {

@@ -70,16 +70,26 @@ const handleRegister = async () => {
   background-color: #f0f2f5;
 }
 .register-box {
-  padding: 40px;
+  padding: 40px 32px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: 360px;
+  width: 420px;
+  max-width: 480px;
+  margin: 0 32px;
 }
 .login-link {
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
+}
+@media (max-width: 540px) {
+  .register-box {
+    width: 100%;
+    max-width: 360px;
+    padding: 30px 20px;
+    margin: 0 16px;
+  }
 }
 /* 其他样式（h1, input-group, button, error-message 等）可以从 LoginView.vue 复制过来 */
 </style>

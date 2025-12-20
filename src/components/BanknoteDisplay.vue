@@ -1,4 +1,4 @@
-<template>
+﻿<template>
   <div class="wallet-container">
     <div class="wallet">
       <div v-for="billType in distributedBills" :key="billType.denomination" class="denomination-group">
@@ -23,7 +23,6 @@
 </template>
 
 <script setup>
-// Script 部分的代码完全不需要改变！
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -60,79 +59,105 @@ const distributedBills = computed(() => {
   border: 2px dashed #ccc;
   border-radius: 8px;
   background-color: #f9f9f9;
-  overflow-x: auto; /* 允许横向滚动 */
+  overflow-x: auto;
 }
 .wallet {
   display: flex;
-   flex-wrap: wrap;
-  gap: 20px; /* 不同面额之间的间距 */
+  flex-wrap: wrap;
+  gap: 20px;
   align-items: flex-start;
   padding-bottom: 20px;
   min-height: 150px;
 }
 .denomination-group {
-  display: flex; /* ★ 使用 Flexbox 布局 */
-  align-items: center; /* 垂直居中对齐 */
+  display: flex;
+  align-items: center;
 }
 
-/* “一捆”钞票的样式 */
 .bill-stack {
-  position: relative; /* 用于标签定位 */
+  position: relative;
   width: 200px;
-  height: 94px; /* 根据图片高度设定 */
-  flex-shrink: 0; /* 防止被压缩 */
-  margin-right: 15px; /* 和后面的钞票保持间距 */
+  height: 94px;
+  flex-shrink: 0;
+  margin-right: 15px;
 }
+
+@media (max-width: 767px) {
+  .bill-stack {
+    width: 120px;
+    height: 56px;
+    margin-right: 10px;
+  }
+}
+
 .stack-img-base, .stack-img-top {
   position: absolute;
-  width: 200px;
+  width: 100%;
   height: auto;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
+
 .stack-img-top {
-  /* 稍微错开一点，营造厚度感 */
   top: 3px;
   left: 3px;
 }
+
+@media (max-width: 767px) {
+  .stack-img-top {
+    top: 2px;
+    left: 2px;
+  }
+}
+
 .stack-label {
   position: absolute;
   bottom: 8px;
-  left: 8px;
-  background-color: rgba(0, 0, 0, 0.6);
+  right: 8px;
+  background: rgba(0,0,0,0.6);
   color: white;
-  padding: 2px 8px;
-  border-radius: 4px;
+  padding: 2px 6px;
+  border-radius: 10px;
   font-size: 12px;
-  font-weight: bold;
-  z-index: 5;
+  z-index: 2;
 }
 
-/* “零散”钞票的样式 */
+@media (max-width: 767px) {
+  .stack-label {
+    bottom: 4px;
+    right: 4px;
+    font-size: 10px;
+  }
+}
+
 .single-bill {
-  flex-shrink: 0; /* 防止被压缩 */
+  width: 180px;
+  margin-right: -100px;
   transition: transform 0.2s ease-out;
-}
-.single-bill img {
-  width: 200px;
-  height: auto;
-  display: block; /* 消除图片下方的空白间隙 */
-  border-radius: 5px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
 }
 
-/* ★★★ 实现堆叠/扇形效果的核心 ★★★ */
-/* 让除了第一个之外的所有零散钞票，都向左移动大部分身位，只露出一点边缘 */
-.single-bill:not(:first-child) {
-  margin-left: -170px; 
+@media (max-width: 767px) {
+  .single-bill {
+    width: 110px;
+    margin-right: -65px;
+  }
 }
-/* 如果一捆钱后面紧跟着一张散钱，给它们之间留出一些空隙 */
-.bill-stack + .single-bill {
-  margin-left: -180px;
+
+.single-bill img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
 }
 
 .single-bill:hover {
   transform: translateY(-10px) scale(1.05);
   z-index: 100;
+}
+
+.bill-stack + .single-bill {
+  margin-left: 10px;
 }
 </style>

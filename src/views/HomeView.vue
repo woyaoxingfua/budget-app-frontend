@@ -9,9 +9,6 @@
     </router-link>
   </div>
   <div v-if="!loading && budgetStatus" class="dashboard-content">
-    </div>
-
-  <div v-if="!loading && budgetStatus" class="dashboard-content">
     <div class="status-card">
       <div class="status-item">
         <span class="label">总预算</span>
@@ -75,6 +72,8 @@ onMounted(() => {
 }
 .status-card {
   display: flex;
+  flex-direction: row;
+  gap: 20px;
   justify-content: space-around;
   background: #fff;
   padding: 20px;
@@ -82,10 +81,26 @@ onMounted(() => {
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   margin-bottom: 30px;
 }
+
 .status-item {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .status-card {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .status-item {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 12px;
+  }
+  .status-item:last-child {
+    border-bottom: none;
+  }
 }
 .label {
   color: #666;

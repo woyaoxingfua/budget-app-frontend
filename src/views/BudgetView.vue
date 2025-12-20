@@ -58,11 +58,18 @@ const handleSetBudget = async () => {
 <style scoped>
 .budget-container {
   max-width: 500px;
-  margin: 0 auto;
+  margin: 20px auto;
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+@media (max-width: 600px) {
+  .budget-container {
+    margin: 10px;
+    padding: 15px;
+  }
 }
 .description {
   color: #666;

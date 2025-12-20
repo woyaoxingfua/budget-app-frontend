@@ -70,11 +70,13 @@ const handleLogin = async () => {
   background-color: #f0f2f5;
 }
 .login-box {
-  padding: 40px;
+  padding: 40px 32px;
   background: white;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  width: 360px;
+  width: 420px;
+  max-width: 480px;
+  margin: 0 32px;
 }
 h1 {
   text-align: center;
@@ -118,5 +120,14 @@ button:hover {
   text-align: center;
   margin-top: 20px;
   font-size: 14px;
+}
+
+@media (max-width: 540px) {
+  .login-box {
+    width: 100%;
+    max-width: 360px;
+    padding: 30px 20px;
+    margin: 0 16px;
+  }
 }
 </style>
