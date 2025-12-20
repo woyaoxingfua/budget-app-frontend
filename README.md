@@ -48,7 +48,7 @@
     ```
 
 ## 项目截图
-![Project Screenshot](/assets/screenshot.png)
+![Project Screenshot](/image.png)
 
 ## 作者
 
